@@ -1,2 +1,3 @@
 ./.idea
 ./project-api/package-lock.json
+./project-api/node_modules
