@@ -16,7 +16,7 @@ const incode = (response) =>{
     console.log(`{\"rows\":${rows}}`);
     let authCode = null;
     if(response.rows.length > 0) {
-        let privateKey = `kn0wled9e#1998`;
+        let privateKey = `your code`;
         authCode = jwt.sign(rows, privateKey);
     }
     return authCode;
