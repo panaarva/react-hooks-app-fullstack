@@ -67,8 +67,8 @@ export default function (props) {
             lookup: {male: 'male', female: 'female', other: 'other'},
         },
     ]);
-    const updateData = (token, userId) => {
-        axios.put(`http://localhost:9000/user?userId=${userId}`, {token}).then(() => {
+        const updateData = (token, userId) => {
+                    axios.put(`http://localhost:9000/user?userId=${userId}`, {token}).then(() => {
             setAlert({...alert, openAlert: true, message: stringValues.updateSuc,severity: "success"})
             fetchData()
         }).catch((err) => {
