@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import MaterialTable from 'material-table'
 import {forwardRef} from 'react';
 import axios from 'axios';
@@ -45,49 +45,99 @@ const tableIcons = {
 };
 const useStyles = makeStyles((theme) => ({
     root: {
-        margin: theme.spacing(8, 0, 0),
+        margin: theme.spacing(8, 0, 15)
     }
 }));
 export default function (props) {
-    const {data, fetchData} = props
+    const {data, fetchData, stringValues} = props
     const classes = useStyles();
     const [alert, setAlert] = useState({
         severity: "success",
         message: "Sign In Success!!",
         openAlert: false
     })
-    const [columns] = useState([
-        {id: "username", title: 'User Name', field: 'username'},
-        {title: 'Password', field: 'userpassword', type: 'string'},
-        {title: 'Email', field: 'email'},
-        {title: 'Birth Day', field: 'bornday', type: 'date'},
+    const [columns, setColumns] = useState([
+        {id: "username", title: stringValues.username, field: 'username'},
+        {title: stringValues.password, field: 'userpassword', type: 'string'},
+        {title: stringValues.email, field: 'email'},
+        {title: stringValues.birthDay, field: 'bornday', type: 'date'},
         {
-            title: 'Gender',
+            title: stringValues.gender,
             field: 'gender',
             lookup: {male: 'male', female: 'female', other: 'other'},
         },
     ]);
     const updateData = (token, userId) => {
         axios.put(`http://localhost:9000/user?userId=${userId}`, {token}).then(() => {
-            setAlert({...alert, openAlert: true, message: 'Update Success!!'})
+            setAlert({...alert, openAlert: true, message: stringValues.updateSuc,severity: "success"})
             fetchData()
         }).catch((err) => {
+            setAlert({...alert, openAlert: true, message: stringValues.notUpdateSuc,severity: "error"})
             console.error(err);
         })
     }
     const deleteData = (userId) => {
         axios.delete(`http://localhost:9000/user?userId=${userId}`).then(() => {
+            setAlert({...alert, openAlert: true, message: stringValues.deletedSuc,severity: "success"})
             fetchData();
+        }).catch((err)=>{
+            setAlert({...alert, openAlert: true, message: stringValues.notDeletedSuc,severity: "success"})
+            console.error(err)
         })
     }
+    useEffect(() => {
+        setColumns([
+            {id: "username", title: stringValues.username, field: 'username'},
+            {title: stringValues.password, field: 'userpassword', type: 'string'},
+            {title: stringValues.email, field: 'email'},
+            {title: stringValues.birthDay, field: 'bornday', type: 'date'},
+            {
+                title: stringValues.gender,
+                field: 'gender',
+                lookup: {male: stringValues.male, female: stringValues.female, other: stringValues.other},
+            },
+        ])
+    }, [stringValues])
     return (
         <div className={classes.root}>
             <CssBaseline/>
             <MaterialTable
                 icons={tableIcons}
-                title="Users Information"
+                title={stringValues.userInfo}
                 columns={columns}
                 data={data}
+                localization={{
+                    body: {
+                        emptyDataSourceMessage: stringValues.displayUser,
+                        deleteTooltip: stringValues.deleted,
+                        editTooltip: stringValues.edit,
+                        editRow: {
+                            deleteText: stringValues.deleteMsg,
+                            cancelTooltip: stringValues.cancel,
+                            saveTooltip: stringValues.save
+                        }
+                    },
+                    header: {
+                        actions: stringValues.actions
+                    },
+                    pagination: {
+                        labelDisplayedRows: `{from}-{to} ${stringValues.of} {count}`,
+                        labelRowsSelect: stringValues.rows,
+                        firstAriaLabel: stringValues.firstPage,
+                        firstTooltip: stringValues.firstPage,
+                        previousAriaLabel: stringValues.previousPage,
+                        previousTooltip: stringValues.previousPage,
+                        nextAriaLabel: stringValues.nextPage,
+                        nextTooltip: stringValues.nextPage,
+                        lastAriaLabel: stringValues.lastPage,
+                        lastTooltip: stringValues.lastPage
+                    },
+                    toolbar: {
+                        exportTitle: stringValues.export,
+                        searchTooltip: stringValues.search,
+                        searchPlaceholder: stringValues.search
+                    }
+                }}
                 options={{exportButton: true}}
                 editable={{
                     onRowUpdate: (newData) =>
