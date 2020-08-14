@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUp(props) {
-    const {fetchData} = props;
+    const {fetchData, stringValues} = props;
     const classes = useStyles();
     const [error, setError] = useState({
         severity: "",
@@ -74,10 +74,9 @@ export default function SignUp(props) {
     const createNewUser = () => {
         const token = incode(values);
 
-        axios.post('http://localhost:9000/user', {token}).then(()=>{
-            console.log("'ολα good όλα ok");
+        axios.post('http://localhost:9000/user', {token}).then(() => {
             fetchData();
-        }).catch((err)=>{
+        }).catch((err) => {
             console.error(err);
         });
     }
@@ -88,21 +87,21 @@ export default function SignUp(props) {
         for (let key in values) {
             if (key !== 'showPassword') {
                 if (!values[key] && key !== 'gender') {
-                    message = "Please fill all inputs!";
+                    message =  stringValues.fillAll;
                     errorFlag = true;
                     break;
                 } else {
                     if (key === 'email') {
                         const emailRegexp = /^[-!#$%&'*+/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
                         if (!emailRegexp.test(values[key])) {
-                            message = "Not a valid Email address!!";
+                            message = stringValues.invalidEmail;
                             errorFlag = true;
                             break;
                         }
                     }
                     if (key === 'password') {
                         if (values[key].length < 8 || values[key].length > 16) {
-                            message = "Password must be from 8 to 16 letters!!";
+                            message = stringValues.passLetters;
                             errorFlag = true;
                             break;
                         }
@@ -118,7 +117,7 @@ export default function SignUp(props) {
         if (!errorFlag) createNewUser();
         if (!errorFlag) {
             setError({...error, flag: true});
-        } else setError({...error,openAlert: true,message,severity: "error"})
+        } else setError({...error, openAlert: true, message, severity: "error"})
     }
     return (
         <Fragment>
@@ -130,7 +129,7 @@ export default function SignUp(props) {
                             <LockOutlined/>
                         </Avatar>
                         <Typography component="h1" variant="h5">
-                            Sign up
+                            {stringValues.signUp}
                         </Typography>
                         <form className={classes.form}>
                             <Grid container spacing={2}>
@@ -140,7 +139,7 @@ export default function SignUp(props) {
                                         required
                                         fullWidth
                                         id="username"
-                                        label="Username"
+                                        label={stringValues.username}
                                         name="username"
                                         autoComplete="username"
                                         onChange={handleChange('username')}
@@ -152,7 +151,7 @@ export default function SignUp(props) {
                                         required
                                         fullWidth
                                         id="email"
-                                        label="Email Address"
+                                        label={stringValues.email}
                                         name="email"
                                         autoComplete="email"
                                         onChange={handleChange('email')}
@@ -160,7 +159,7 @@ export default function SignUp(props) {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <FormControl required className={classes.pass} variant="outlined">
-                                        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+                                        <InputLabel htmlFor="outlined-adornment-password">{stringValues.password}</InputLabel>
                                         <OutlinedInput
                                             id="password"
                                             variant="outlined"
@@ -190,9 +189,10 @@ export default function SignUp(props) {
                                         fullWidth
                                         type="date"
                                         id="date"
-                                        label="Birth Day"
+                                        label={stringValues.birthDay}
                                         name="birthday"
-                                        autoComplete="date"
+                                        locale='el'
+                                        defaultValue={new Date().toISOString().slice(0,10)}
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
@@ -205,19 +205,19 @@ export default function SignUp(props) {
                                         <FormControlLabel
                                             value="male"
                                             control={<Radio color="primary"/>}
-                                            label="Male"
+                                            label={stringValues.male}
                                             labelPlacement="end"
                                         />
                                         <FormControlLabel
                                             value="female"
                                             control={<Radio color="primary"/>}
-                                            label="Female"
+                                            label={stringValues.female}
                                             labelPlacement="end"
                                         />
                                         <FormControlLabel
                                             value="other"
                                             control={<Radio color="primary"/>}
-                                            label="Other"
+                                            label={stringValues.other}
                                             labelPlacement="end"
                                         />
                                     </RadioGroup>
@@ -231,7 +231,7 @@ export default function SignUp(props) {
                                 className={classes.submit}
                                 onClick={handleSubmit}
                             >
-                                Sign Up
+                                {stringValues.signUp}
                             </Button>
                         </form>
                     </div>
@@ -243,7 +243,7 @@ export default function SignUp(props) {
                         <path
                             d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                     </svg>
-                    <h2>Signed in successfully!!</h2>
+                    <h2>{stringValues.signUpSuc}</h2>
                 </div>
             }
 
