@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
     },
     contentWrap: {
-        paddingBottom: "2.5rem"    /* Footer height */
+        paddingBottom: "2.5rem"
     },
     footer: {
         backgroundColor: theme.palette.background.paper,
@@ -77,7 +77,7 @@ function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
             {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
+            <Link color="inherit" href="https://innovative.gr/">
                 Innovative IKE
             </Link>{' '}
             {new Date().getFullYear()}
@@ -97,6 +97,8 @@ function App() {
     const fetchData = () => {
         axios.get('http://localhost:9000/user').then((res) => {
             setData(decode(res.data).rows);
+        }).catch((err) => {
+            setData([])
         })
     }
     useEffect(() => {
