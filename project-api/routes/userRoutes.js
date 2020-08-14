@@ -2,31 +2,28 @@ const express = require("express");
 const router = express.Router();
 const createError = require('http-errors');
 const client = require('../lib/config').pool;
-const {incode,decode} = require('../lib/utils');
+const {incode, decode} = require('../lib/utils');
 client.connect();
 
 router.get('/', async (req, res, next) => {
     try {
         const response = await client.query(`SELECT *
-                                           FROM public.user`);
-        if (response.rows.length === 0) {
-            next(createError(404, 'NOT FOUND'));
-        } else {
-            const authCode = incode(response);
-            res.status(200);
-            res.send(authCode);
-        }
+                                             FROM public.user`);
+        const authCode = incode(response);
+        res.status(200);
+        res.send(authCode);
     } catch (e) {
-        console.log(e);
+        console.error(e);
         next(createError(404, 'NOT FOUND'));
     }
 })
 router.get('/signIn', async (req, res, next) => {
     try {
-        const {email,password} = decode(req.headers.token);
+        const {email, password} = decode(req.headers.token);
         const response = await client.query(`SELECT *
-                                           FROM public.user
-                                           WHERE userpassword = $1 AND email = $2`,[password,email]);
+                                             FROM public.user
+                                             WHERE userpassword = $1
+                                               AND email = $2`, [password, email]);
         if (response.rows.length === 0) {
             next(createError(404, 'NOT FOUND'));
         } else {
@@ -35,14 +32,14 @@ router.get('/signIn', async (req, res, next) => {
             res.send(authCode);
         }
     } catch (e) {
-        console.log(e);
+        console.error(e);
         next(createError(404, 'NOT FOUND'));
     }
 })
 router.post('/', async (req, res, next) => {
     const {token} = req.body;
     const data = decode(token);
-    const {username,email,password,gender,bornday} = data;
+    const {username, email, password, gender, bornday} = data;
 
     try {
         const response = await client.query(`INSERT INTO public.user (username, userpassword, email, gender, bornday)
@@ -69,7 +66,7 @@ router.delete('/', async (req, res, next) => {
             res.send('success');
         }
     } catch (e) {
-        console.log(e);
+        console.error(e);
         next(createError(404, 'NOT FOUND'));
     }
 })
@@ -85,7 +82,8 @@ router.put('/', async (req, res, next) => {
                                                email        = $3,
                                                gender       = $4,
                                                bornday      = $5
-                                           where id = $6 RETURNING id`, [username, userpassword, email, gender, new Date(bornday), userId]);
+                                           where id = $6
+                                           RETURNING id`, [username, userpassword, email, gender, new Date(bornday), userId]);
         if (rows.length === 0) {
             next(createError(404, 'INVALID USER'));
         } else {
@@ -93,7 +91,7 @@ router.put('/', async (req, res, next) => {
             res.send('success');
         }
     } catch (e) {
-        console.log(e);
+        console.error(e);
         next(createError(404, 'NOT FOUND'));
     }
 
