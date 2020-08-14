@@ -45,7 +45,8 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function () {
+export default function (props) {
+    const {stringValues} = props;
     const classes = useStyles();
     const [error, setError] = useState({
         severity: "",
@@ -74,21 +75,21 @@ export default function () {
         for (let key in values) {
             if (key !== 'showPassword') {
                 if (!values[key]) {
-                    message = "Please fill all inputs!";
+                    message = stringValues.fillAll;
                     errorFlag = true;
                     break;
                 } else {
                     if (key === 'email') {
                         const emailRegexp = /^[-!#$%&'*+/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
                         if (!emailRegexp.test(values[key])) {
-                            message = "Not a valid Email address!!";
+                            message = stringValues.invalidEmail;
                             errorFlag = true;
                             break;
                         }
                     }
                     if (key === 'password') {
                         if (values[key].length < 8 || values[key].length > 16) {
-                            message = "Password must be from 8 to 16 letters!!";
+                            message = stringValues.passLetters;
                             errorFlag = true;
                             break;
                         }
@@ -133,24 +134,23 @@ export default function () {
                             <LockOutlined/>
                         </Avatar>
                         <Typography component="h1" variant="h5">
-                            Sign in
+                            {stringValues.signIn}
                         </Typography>
                         <form className={classes.form}>
                             <TextField
                                 variant="outlined"
                                 margin="normal"
                                 required
-                                value={null}
                                 fullWidth
                                 id="email"
-                                label="Email Address"
+                                label={stringValues.email}
                                 name="email"
                                 autoComplete="email"
                                 autoFocus
                                 onChange={handleChange('email')}
                             />
                             <FormControl required className={classes.pass} variant="outlined">
-                                <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+                                <InputLabel htmlFor="outlined-adornment-password">{stringValues.password}</InputLabel>
                                 <OutlinedInput
                                     id="password"
                                     variant="outlined"
@@ -180,18 +180,19 @@ export default function () {
                                 className={classes.submit}
                                 onClick={handleSubmit}
                             >
-                                Sign In
+                                {stringValues.signIn}
                             </Button>
                         </form>
                     </div>
                     <Alert alert={error} setAlert={setError}/>
                 </Container> :
                 <div className={classes.paper}>
+                    <CssBaseline/>
                     <svg fill="green" xmlns="http://www.w3.org/2000/svg" width="350" height="350" viewBox="0 0 24 24">
                         <path
                             d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                     </svg>
-                    <h2>Signed in successfully!!</h2>
+                    <h2>{stringValues.signInSuc}</h2>
                 </div>
             }
         </Fragment>
