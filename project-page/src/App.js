@@ -16,6 +16,7 @@ import axios from "axios";
 import {decode} from "./utils/utils";
 import Flag from './components/Flag';
 import Container from "@material-ui/core/Container";
+import stringValues from "./strings.json"
 
 function TabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -86,87 +87,6 @@ function Copyright() {
 }
 
 function App() {
-    const stringValues = {
-        el: {
-            signIn: "Σύνδεση",
-            password: "Κωδικός",
-            email: "Διεύθυνση Ηλεκτρονικού Ταχυδρομείου",
-            signUp: "Εγγραφή",
-            user: "Χρήστες",
-            username: "Όνομα χρήστη",
-            male: "Άνδρας",
-            female: "Γυναίκα",
-            other: "Άλλο",
-            birthDay: "Ημέρα γέννησης",
-            userInfo: "Πληροφορίες χρηστών",
-            gender: "Φύλο",
-            deleted: "Διαγραφή",
-            edit: "Επεξεργασία",
-            deleteMsg: "Είστε σίγουροι ότι θέλετε να διαγράψετε αυτόν τον χρήστη;",
-            save: "Αποθήκευση",
-            cancel: "Ακύρωση",
-            rows: "γραμμές",
-            of: "από",
-            search: "Αναζήτηση",
-            actions: "Λειτουργίες",
-            nextPage: "Επόμενη Σελίδα",
-            previousPage: "Προηγούμενη Σελίδα",
-            lastPage: "Τελευταία Σελίδα",
-            firstPage: "Πρώτη Σελίδα",
-            displayUser: "Δεν υπάρχουν χρήστες για εμφάνιση",
-            export: "Εξαγωγή",
-            selectLang: "Επιλέξτε Γλώσσα",
-            fillAll: "Συμπληρώστε όλα τα πεδία!",
-            invalidEmail: "Μη έγκυρη διεύθυνση e-mail.",
-            passLetters: "Ο κωδικός πρόσβασης πρέπει να αποτελείται από 8 έως 16 γράμματα",
-            updateSuc: "Η ενημέρωση ήταν επιτυχής!!",
-            notUpdateSuc:"Η ενημέρωση δεν ήταν επιτυχής",
-            deletedSuc:"Διαγράφηκε με επιτυχία!!",
-            notDeletedSuc:"Δεν διαγράφηκε με επιτυχία",
-            signInSuc:"Συνδεθήκατε με επιτυχία!!",
-            signUpSuc: "Γραφτήκατε με επιτυχία"
-        },
-        en: {
-            signIn: "Sign In",
-            password: "Password",
-            email: "Email Address",
-            signUp: "Sign Up",
-            user: "Users",
-            username: "Username",
-            male: "Male",
-            female: "Female",
-            other: "Other",
-            birthDay: "Birth Day",
-            userInfo: "User Information",
-            gender: "Gender",
-            deleted: "Deleted",
-            edit: "Edit",
-            deleteMsg: "Are you sure you want to delete this user?",
-            save: "Save",
-            cancel: "Cancel",
-            rows: "rows",
-            of: "of",
-            search: "Search",
-            actions: "Actions",
-            nextPage: "Next Page",
-            previousPage: "Previous Page",
-            lastPage: "Last Page",
-            firstPage: "First Page",
-            displayUser: "No users to display",
-            export: "Export",
-            selectLang: "Select Language",
-            fillAll: "Please fill all inputs!",
-            invalidEmail: "Invalid email address.",
-            passLetters: "Password must be from 8 to 16 letters",
-            updateSuc: "Update Successful!!",
-            notUpdateSuc:"Not update successful",
-            deletedSuc:"Deleted successful!!",
-            notDeletedSuc:"Not deleted successful",
-            signInSuc:"Signed in successfully!!",
-            signUpSuc:"Signed up successfully!!",
-
-        }
-    }
     const [flag, setFlag] = useState('el');
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
