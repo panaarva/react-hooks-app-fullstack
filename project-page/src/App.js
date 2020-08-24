@@ -16,7 +16,7 @@ import {decode} from "./utils/utils";
 import Flag from './components/Flag';
 import Container from "@material-ui/core/Container";
 import stringValues from "./strings.json"
-import {BrowserRouter, Route, Link, Switch} from "react-router-dom";
+import {BrowserRouter, Route, Link, Switch } from "react-router-dom";
 
 function TabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -95,6 +95,7 @@ function App() {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
     const fetchData = () => {
         axios.get('/user').then((res) => {
             setData(decode(res.data).rows);
@@ -102,8 +103,9 @@ function App() {
             setData([])
         })
     }
+
     useEffect(() => {
-        fetchData()
+        fetchData();
     }, [])
     return (
         <BrowserRouter>
