@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import MaterialTable from 'material-table'
 import {forwardRef} from 'react';
 import axios from 'axios';
-import {incode} from '../utils/utils';
+import {encode} from '../utils/utils';
 import {
     AddBox,
     ArrowDownward,
@@ -143,7 +143,7 @@ export default function (props) {
                     onRowUpdate: (newData) =>
                         new Promise((resolve) => {
                             setTimeout(() => {
-                                const token = incode(newData);
+                                const token = encode(newData);
                                 updateData(token, newData.id);
                                 resolve();
                             }, 1000)
