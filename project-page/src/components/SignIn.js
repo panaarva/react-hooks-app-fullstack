@@ -15,7 +15,7 @@ import {
 } from '@material-ui/core';
 import {Visibility, VisibilityOff, LockOutlined} from '@material-ui/icons';
 import axios from 'axios';
-import {incode} from '../utils/utils';
+import {encode} from '../utils/utils';
 import Alert from "./Alert";
 import {withRouter} from 'react-router-dom'
 
@@ -111,7 +111,7 @@ function SignIn(props) {
     }
     const verification = async (email, password) => {
         let verificationErr = false;
-        const token = incode({
+        const token = encode({
             email,
             password
         });
