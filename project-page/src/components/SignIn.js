@@ -17,6 +17,7 @@ import {Visibility, VisibilityOff, LockOutlined} from '@material-ui/icons';
 import axios from 'axios';
 import {incode} from '../utils/utils';
 import Alert from "./Alert";
+import {withRouter} from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -45,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function (props) {
+function SignIn(props) {
     const {stringValues} = props;
     const classes = useStyles();
     const [error, setError] = useState({
@@ -105,6 +106,7 @@ export default function (props) {
         }
         if (!errorFlag) {
             setError({...error, flag: true});
+            props.history.push('/success');
         } else setError({...error, openAlert: true, message, severity: "error"});
     }
     const verification = async (email, password) => {
@@ -117,7 +119,7 @@ export default function (props) {
             'Content-Type': 'application/json',
             'token': token
         }
-        await axios.get(`http://localhost:9000/user/signIn`, {headers}).catch((err) => {
+        await axios.get(`/user/signIn`, {headers}).catch((err) => {
             if (String(err).indexOf('Request failed with status code 404') !== -1) {
                 verificationErr = true;
             }
@@ -198,3 +200,5 @@ export default function (props) {
         </Fragment>
     );
 }
+
+export default withRouter(SignIn)
