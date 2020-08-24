@@ -21,6 +21,7 @@ import {
 import {Visibility, VisibilityOff, LockOutlined} from "@material-ui/icons";
 import axios from 'axios';
 import Alert from "./Alert";
+import {withRouter} from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -45,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function SignUp(props) {
+function SignUp(props) {
     const {fetchData, stringValues} = props;
     const classes = useStyles();
     const [error, setError] = useState({
@@ -59,7 +60,7 @@ export default function SignUp(props) {
         email: '',
         password: '',
         gender: '',
-        bornday: '',
+        bornday: new Date().toISOString().slice(0,10),
         showPassword: false,
     });
     const handleChange = (prop) => (event) => {
@@ -74,7 +75,7 @@ export default function SignUp(props) {
     const createNewUser = () => {
         const token = incode(values);
 
-        axios.post('http://localhost:9000/user', {token}).then(() => {
+        axios.post('/user', {token}).then(() => {
             fetchData();
         }).catch((err) => {
             console.error(err);
@@ -250,3 +251,4 @@ export default function SignUp(props) {
         </Fragment>
     );
 }
+export default withRouter(SignUp)
