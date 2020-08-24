@@ -1,6 +1,6 @@
 import React, {useState, Fragment} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
-import {incode} from '../utils/utils';
+import {encode} from '../utils/utils';
 import {
     RadioGroup,
     FormControl,
@@ -73,7 +73,7 @@ function SignUp(props) {
         setValues({...values, showPassword: !values.showPassword});
     };
     const createNewUser = () => {
-        const token = incode(values);
+        const token = encode(values);
 
         axios.post('/user', {token}).then(() => {
             fetchData();
