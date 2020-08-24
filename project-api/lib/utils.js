@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
+const {privateKey} = require('./config');
 
 const decode = (authCode) => {
-    let privateKey = `kn0wled9e#1998`;
     let userInfo;
     try {
         userInfo = jwt.verify(authCode, privateKey);
@@ -11,14 +11,13 @@ const decode = (authCode) => {
     }
     return userInfo;
 }
-const incode = (response) => {
+const encode = (response) => {
     const rows = {rows: (response.rows) ? response.rows : {}};
     let authCode;
-    let privateKey = `kn0wled9e#1998`;
     authCode = jwt.sign(rows, privateKey);
     return authCode;
 }
 module.exports = {
     decode,
-    incode
+    encode
 }
