@@ -68,7 +68,7 @@ export default function (props) {
         },
     ]);
         const updateData = (token, userId) => {
-                    axios.put(`http://localhost:9000/user?userId=${userId}`, {token}).then(() => {
+                    axios.put(`/user?userId=${userId}`, {token}).then(() => {
             setAlert({...alert, openAlert: true, message: stringValues.updateSuc,severity: "success"})
             fetchData()
         }).catch((err) => {
@@ -77,7 +77,7 @@ export default function (props) {
         })
     }
     const deleteData = (userId) => {
-        axios.delete(`http://localhost:9000/user?userId=${userId}`).then(() => {
+        axios.delete(`/user?userId=${userId}`).then(() => {
             setAlert({...alert, openAlert: true, message: stringValues.deletedSuc,severity: "success"})
             fetchData();
         }).catch((err)=>{
