@@ -6,3 +6,4 @@ exports.pool = new Pool({
     password: 'kn0wled9e',
     port: 5432
 });
+exports.privateKey = `kn0wled9e#1998`;
