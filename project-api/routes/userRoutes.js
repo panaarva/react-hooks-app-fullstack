@@ -2,14 +2,14 @@ const express = require("express");
 const router = express.Router();
 const createError = require('http-errors');
 const client = require('../lib/config').pool;
-const {incode, decode} = require('../lib/utils');
+const {encode, decode} = require('../lib/utils');
 client.connect();
 
 router.get('/', async (req, res, next) => {
     try {
         const response = await client.query(`SELECT *
                                              FROM public.user`);
-        const authCode = incode(response);
+        const authCode = encode(response);
         res.status(200);
         res.send(authCode);
     } catch (e) {
@@ -27,7 +27,7 @@ router.get('/signIn', async (req, res, next) => {
         if (response.rows.length === 0) {
             next(createError(404, 'NOT FOUND'));
         } else {
-            const authCode = incode(response);
+            const authCode = encode(response);
             res.status(200);
             res.send(authCode);
         }
