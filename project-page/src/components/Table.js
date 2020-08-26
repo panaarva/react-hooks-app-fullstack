@@ -45,7 +45,8 @@ const tableIcons = {
 };
 const useStyles = makeStyles((theme) => ({
     root: {
-        margin: theme.spacing(8, 0, 15)
+        marginTop: theme.spacing(8),
+        paddingBottom:theme.spacing(25)
     }
 }));
 export default function (props) {
@@ -151,8 +152,9 @@ export default function (props) {
                     onRowDelete: oldData =>
                         new Promise((resolve) => {
                             setTimeout(() => {
-                                deleteData(data[oldData.tableData.id].id);
                                 resolve()
+                                deleteData(data[oldData.tableData.id].id);
+
                             }, 1000)
                         }),
                 }}

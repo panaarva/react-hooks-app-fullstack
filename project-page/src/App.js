@@ -16,7 +16,7 @@ import {decode} from "./utils/utils";
 import Flag from './components/Flag';
 import Container from "@material-ui/core/Container";
 import stringValues from "./strings.json"
-import {BrowserRouter, Route, Link, Switch } from "react-router-dom";
+import {BrowserRouter, Route, Link, Switch,Redirect } from "react-router-dom";
 
 function TabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -87,11 +87,12 @@ function Copyright() {
 }
 
 function App() {
-    const allTabs = ['/', '/signup', '/user'];
-    const [flag, setFlag] = useState('el');
+    const allTabs = ['', '/signup', '/user'];
+    const [flag, setFlag] = useState((window.location.pathname.indexOf("en")!==-1)?"en":"el");
     const classes = useStyles();
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = React.useState((window.location.pathname.indexOf('/el')!==-1||window.location.pathname.indexOf('/en')!==-1)?window.location.pathname:'');
     const [data, setData] = useState([]);
+    console.log(value)
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -113,13 +114,13 @@ function App() {
                 <div className={classes.contentWrap}>
                     <AppBar position="absolute">
                         <Toolbar className={classes.toolbar}>
-                            <Tabs value={value} centered onChange={handleChange} aria-label="simple tabs example">
-                                <Tab label={stringValues[flag].signIn} value="/" component={Link}
-                                     to={allTabs[0]} {...a11yProps(0)}/>
-                                <Tab label={stringValues[flag].signUp} value="/signup" component={Link}
-                                     to={allTabs[1]} {...a11yProps(1)}/>
-                                <Tab label={stringValues[flag].user} value="/user" component={Link}
-                                     to={allTabs[2]} {...a11yProps(2)}/>
+                            <Tabs value={String(value).replace('/en','').replace('/el','')} centered onChange={handleChange} aria-label="simple tabs example">
+                                <Tab label={stringValues[flag].signIn} value={`${allTabs[0]}`} component={Link}
+                                     to={`/${flag}${allTabs[0]}`} {...a11yProps(0)}/>
+                                <Tab label={stringValues[flag].signUp} value={`${allTabs[1]}`} component={Link}
+                                     to={`/${flag}${allTabs[1]}`} {...a11yProps(1)}/>
+                                <Tab label={stringValues[flag].user} value={`${allTabs[2]}`} component={Link}
+                                     to={`/${flag}${allTabs[2]}`} {...a11yProps(2)}/>
                             </Tabs>
                             <div className={classes.grow}/>
                             <Flag flag={flag} setFlag={setFlag} stringValues={stringValues[flag]}/>
@@ -135,11 +136,12 @@ function App() {
                     </Container>
                 </footer>
                 <Switch>
-                    <Route path={allTabs[1]} render={() => <div><SignUp setValue={setValue} fetchData={fetchData}
-                                                                        stringValues={stringValues[flag]}/></div>}/>
-                    <Route path={allTabs[2]} render={() => <Table data={data} fetchData={fetchData}
+                    <Route path={`/${flag}${allTabs[1]}`} render={() => <div><SignUp setValue={setValue} fetchData={fetchData}
+                                                                        stringValues={stringValues[flag]}/></div>} />
+                    <Route path={`/${flag}${allTabs[2]}`} render={() => <Table data={data} fetchData={fetchData}
                                                                   stringValues={stringValues[flag]}/>}/>
-                    <Route path={allTabs[0]} render={() => <SignIn stringValues={stringValues[flag]}/>}/>
+                    <Route path={`/${flag}${allTabs[0]}`} render={() => <SignIn stringValues={stringValues[flag]}/>} exact/>
+                    <Redirect from={window.location.pathname} to={`/${flag}${allTabs[0]}`}/>
                 </Switch>
             </div>
 

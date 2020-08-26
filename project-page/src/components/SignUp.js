@@ -26,6 +26,7 @@ import {withRouter} from 'react-router-dom';
 const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(8),
+        paddingBottom:theme.spacing(20),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
