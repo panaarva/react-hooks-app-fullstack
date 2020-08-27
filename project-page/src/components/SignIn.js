@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function SignIn(props) {
-    const {stringValues} = props;
+    const {stringValues,flag} = props;
     const classes = useStyles();
     const [error, setError] = useState({
         severity: "",
@@ -107,7 +107,7 @@ function SignIn(props) {
         }
         if (!errorFlag) {
             setError({...error, flag: true});
-            props.history.push('/success');
+            props.history.push(`/${flag}/success/signin`);
         } else setError({...error, openAlert: true, message, severity: "error"});
     }
     const verification = async (email, password) => {
@@ -120,11 +120,13 @@ function SignIn(props) {
             'Content-Type': 'application/json',
             'token': token
         }
-        await axios.get(`/user/signIn`, {headers}).catch((err) => {
+        try {
+            await axios.get(`/user/signIn`, {headers});
+        }catch (err){
             if (String(err).indexOf('Request failed with status code 404') !== -1) {
                 verificationErr = true;
             }
-        })
+        }
         return verificationErr;
     }
     return (
