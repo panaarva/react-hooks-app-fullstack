@@ -33,14 +33,22 @@ const useStyles = makeStyles((theme) => ({
         color: "white",
         flexDirection: 'column',
         alignItems: 'center',
+        '@media (max-width:1300px)': {
+            width: "100%",
+            flexDirection: 'column',
+            alignItems: 'center',
+        }
     },
     avatar: {
-
         width: theme.spacing(12),
         height: theme.spacing(12),
     },
     header: {
-        marginTop: theme.spacing(4)
+        marginTop: theme.spacing(4),
+        fontSize: 40,
+        '@media (max-width:600px)': {
+            fontSize: 20
+        }
     },
     fabButton: {
         position: 'absolute',
@@ -53,7 +61,14 @@ const useStyles = makeStyles((theme) => ({
     backdrop: {
         zIndex: theme.zIndex.drawer + 1,
         color: '#fff',
+    },
+    box: {
+        width: "50%",
+        '@media (max-width:1300px)': {
+            width: "100%"
+        }
     }
+
 }));
 
 export default (props) => {
@@ -80,46 +95,46 @@ export default (props) => {
                     <CircularProgress color="inherit"/>
                 </Backdrop>
             </div>
-                <div className={classes.root}>
-                    <Toolbar className={classes.toolbar}>
-                        <Fab color="primary" aria-label="add" className={classes.fabButton}>
-                            <Avatar color="primary" className={classes.avatar}/>
-                        </Fab>
-                        <Typography variant="h4" className={classes.header}>{data.username}</Typography>
-                        <Typography variant="h6">{`${stringValues.userid}: ${userID}`}</Typography>
-                    </Toolbar>
-                    <Box boxShadow={3} style={{width: "50%"}}>
-                        <List>
-                            <ListItem>
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        <EmailIcon/>
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText primary={stringValues.email} secondary={data.email}/>
-                            </ListItem>
-                            <Divider variant="inset" component="li"/>
-                            <ListItem>
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        <AssignmentInd/>
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText primary={stringValues.gender} secondary={data.gender}/>
-                            </ListItem>
-                            <Divider variant="inset" component="li"/>
-                            <ListItem>
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        <CakeIcon/>
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText primary={stringValues.birthDay}
-                                              secondary={String(data.bornday).slice(0, 10)}/>
-                            </ListItem>
-                        </List>
-                    </Box>
-                </div>
+            <div className={classes.root}>
+                <Toolbar className={classes.toolbar}>
+                    <Fab color="primary" aria-label="add" className={classes.fabButton}>
+                        <Avatar color="primary" className={classes.avatar}/>
+                    </Fab>
+                    <Typography className={classes.header}>{data.username}</Typography>
+                    <Typography variant="h6">{`${stringValues.userid}: ${userID}`}</Typography>
+                </Toolbar>
+                <Box boxShadow={3} className={classes.box}>
+                    <List>
+                        <ListItem>
+                            <ListItemAvatar>
+                                <Avatar>
+                                    <EmailIcon/>
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText primary={stringValues.email} secondary={data.email}/>
+                        </ListItem>
+                        <Divider variant="inset" component="li"/>
+                        <ListItem>
+                            <ListItemAvatar>
+                                <Avatar>
+                                    <AssignmentInd/>
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText primary={stringValues.gender} secondary={data.gender}/>
+                        </ListItem>
+                        <Divider variant="inset" component="li"/>
+                        <ListItem>
+                            <ListItemAvatar>
+                                <Avatar>
+                                    <CakeIcon/>
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText primary={stringValues.birthDay}
+                                          secondary={String(data.bornday).slice(0, 10)}/>
+                        </ListItem>
+                    </List>
+                </Box>
+            </div>
 
         </Fragment>
     )
