@@ -24,6 +24,8 @@ import {
 import {makeStyles} from "@material-ui/core/styles";
 import Alert from "./Alert";
 import {CssBaseline} from "@material-ui/core";
+import Backdrop from "@material-ui/core/Backdrop";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref}/>),
@@ -48,9 +50,14 @@ const useStyles = makeStyles((theme) => ({
     root: {
         marginTop: theme.spacing(8),
         paddingBottom: theme.spacing(25)
-    }
+    },
+    backdrop: {
+        zIndex: theme.zIndex.drawer + 1,
+        color: '#fff',
+    },
 }));
 export default function (props) {
+    const [open, setOpen] = useState(false);
     const divProps = Object.assign({}, props);
     delete divProps.layout;
 
@@ -78,7 +85,7 @@ export default function (props) {
             await axios.put(`/user?userId=${userId}`, {token});
             setAlert({...alert, openAlert: true, message: stringValues.updateSuc, severity: "success"});
             await fetchData();
-        }catch (err){
+        } catch (err) {
             setAlert({...alert, openAlert: true, message: stringValues.notUpdateSuc, severity: "error"});
             console.error(err);
         }
@@ -109,6 +116,11 @@ export default function (props) {
     return (
         <div className={classes.root}>
             <CssBaseline/>
+            <div>
+                <Backdrop className={classes.backdrop} open={open}>
+                    <CircularProgress color="inherit"/>
+                </Backdrop>
+            </div>
             <MaterialTable
                 icons={tableIcons}
                 title={stringValues.userInfo}
@@ -159,22 +171,17 @@ export default function (props) {
                     }
                 ]}
                 editable={{
-                    onRowUpdate: (newData) =>
-                        new Promise((resolve) => {
-                            setTimeout(() => {
-                                const token = encode(newData);
-                                updateData(token, newData.id);
-                                resolve();
-                            }, 1000)
-                        }),
-                    onRowDelete: oldData =>
-                        new Promise((resolve) => {
-                            setTimeout(() => {
-                                resolve()
-                                deleteData(data[oldData.tableData.id].id);
-
-                            }, 1000)
-                        }),
+                    onRowUpdate: async(newData) => {
+                        setOpen(true);
+                        const token = encode(newData);
+                        await updateData(token, newData.id);
+                        setOpen(false);
+                    },
+                    onRowDelete:async (oldData) => {
+                        setOpen(true);
+                        await deleteData(data[oldData.tableData.id].id);
+                        setOpen(false);
+                    }
                 }}
             />
             <Alert alert={alert} setAlert={setAlert}/>
