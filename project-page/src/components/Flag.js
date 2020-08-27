@@ -1,4 +1,4 @@
-import React, {useState, Fragment, useEffect} from "react";
+import React, {useState, Fragment} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -47,9 +47,6 @@ export default (props) => {
             <MenuItem value='en' onClick={handleMenuClose('en')}><Flag code="GB" style={{width: "30px"}}/></MenuItem>
         </Menu>
     );
-    useEffect(()=>{
-        console.log("flag")
-    },[])
 
     return (
         <Fragment>
