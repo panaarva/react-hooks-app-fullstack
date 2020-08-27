@@ -108,6 +108,7 @@ function App() {
     }
 
     useEffect(() => {
+        setFlag((window.location.pathname.indexOf("en")!==-1)?"en":"el");
         fetchData();
     }, [])
     return (
