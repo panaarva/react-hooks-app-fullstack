@@ -17,8 +17,23 @@ router.get('/', async (req, res, next) => {
         next(createError(404, 'NOT FOUND'));
     }
 })
+router.get('/profile/:userid', async (req, res, next) => {
+    const {userid} = req.params;
+    try {
+        const response = await client.query(`SELECT *
+                                             FROM public.user
+                                             WHERE id = $1`,[userid]);
+        const authCode = encode(response);
+        res.status(200);
+        res.send(authCode);
+    } catch (e) {
+        console.error(e);
+        next(createError(404, 'NOT FOUND'));
+    }
+})
 router.get('/signIn', async (req, res, next) => {
     try {
+        console.log("ok");
         const {email, password} = decode(req.headers.token);
         const response = await client.query(`SELECT *
                                              FROM public.user
