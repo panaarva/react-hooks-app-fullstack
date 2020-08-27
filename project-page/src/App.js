@@ -4,6 +4,8 @@ import {makeStyles} from '@material-ui/core/styles';
 import SignIn from "./components/SignIn";
 import Table from "./components/Table";
 import SignUp from "./components/SignUp";
+import Profile from "./components/Profile"
+import Success from "./components/Success";
 import {
     Tabs,
     Tab,
@@ -87,22 +89,22 @@ function Copyright() {
 }
 
 function App() {
-    const allTabs = ['', '/signup', '/user'];
+    const allTabs = ['', '/signup', '/user','/profile','/success'];
     const [flag, setFlag] = useState((window.location.pathname.indexOf("en")!==-1)?"en":"el");
     const classes = useStyles();
     const [value, setValue] = React.useState((window.location.pathname.indexOf('/el')!==-1||window.location.pathname.indexOf('/en')!==-1)?window.location.pathname:'');
     const [data, setData] = useState([]);
-    console.log(value)
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
-    const fetchData = () => {
-        axios.get('/user').then((res) => {
+    const fetchData = async () => {
+        try {
+            const res = await axios.get('/user')
             setData(decode(res.data).rows);
-        }).catch(() => {
+        }catch (err){
             setData([])
-        })
+        }
     }
 
     useEffect(() => {
@@ -114,7 +116,7 @@ function App() {
                 <div className={classes.contentWrap}>
                     <AppBar position="absolute">
                         <Toolbar className={classes.toolbar}>
-                            <Tabs value={String(value).replace('/en','').replace('/el','')} centered onChange={handleChange} aria-label="simple tabs example">
+                            <Tabs value={String(value).replace('/en','').replace('/el','')} onChange={handleChange} aria-label="simple tabs example">
                                 <Tab label={stringValues[flag].signIn} value={`${allTabs[0]}`} component={Link}
                                      to={`/${flag}${allTabs[0]}`} {...a11yProps(0)}/>
                                 <Tab label={stringValues[flag].signUp} value={`${allTabs[1]}`} component={Link}
@@ -139,8 +141,10 @@ function App() {
                     <Route path={`/${flag}${allTabs[1]}`} render={() => <div><SignUp setValue={setValue} fetchData={fetchData}
                                                                         stringValues={stringValues[flag]}/></div>} />
                     <Route path={`/${flag}${allTabs[2]}`} render={() => <Table data={data} fetchData={fetchData}
-                                                                  stringValues={stringValues[flag]}/>}/>
-                    <Route path={`/${flag}${allTabs[0]}`} render={() => <SignIn stringValues={stringValues[flag]}/>} exact/>
+                                                                  stringValues={stringValues[flag]} flag={flag}/>}/>
+                    <Route path={`/${flag}${allTabs[0]}`} render={() => <SignIn stringValues={stringValues[flag]} flag={flag}/>} exact/>
+                    <Route path={`/${flag}${allTabs[3]}/:userid`} render={() => <div><Profile stringValues={stringValues[flag]}/></div>}/>
+                    <Route path={`/${flag}${allTabs[4]}/:action`} render={()=><Success stringValues={stringValues[flag]}/>}/>
                     <Redirect from={window.location.pathname} to={`/${flag}${allTabs[0]}`}/>
                 </Switch>
             </div>
