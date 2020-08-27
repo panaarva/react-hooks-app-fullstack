@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
-import MaterialTable from 'material-table'
-import {forwardRef} from 'react';
+import React, {useEffect, useState, forwardRef} from "react";
+import MaterialTable from 'material-table';
+import {useHistory} from 'react-router-dom';
 import axios from 'axios';
 import {encode} from '../utils/utils';
 import {
@@ -18,7 +18,8 @@ import {
     FirstPage,
     FilterList,
     Edit,
-    DeleteOutline
+    DeleteOutline,
+    Person as PersonIcon
 } from '@material-ui/icons';
 import {makeStyles} from "@material-ui/core/styles";
 import Alert from "./Alert";
@@ -46,11 +47,15 @@ const tableIcons = {
 const useStyles = makeStyles((theme) => ({
     root: {
         marginTop: theme.spacing(8),
-        paddingBottom:theme.spacing(25)
+        paddingBottom: theme.spacing(25)
     }
 }));
 export default function (props) {
-    const {data, fetchData, stringValues} = props
+    const divProps = Object.assign({}, props);
+    delete divProps.layout;
+
+    const history = useHistory();
+    const {data, fetchData, stringValues, flag} = props
     const classes = useStyles();
     const [alert, setAlert] = useState({
         severity: "success",
@@ -68,23 +73,25 @@ export default function (props) {
             lookup: {male: 'male', female: 'female', other: 'other'},
         },
     ]);
-        const updateData = (token, userId) => {
-                    axios.put(`/user?userId=${userId}`, {token}).then(() => {
-            setAlert({...alert, openAlert: true, message: stringValues.updateSuc,severity: "success"})
-            fetchData()
-        }).catch((err) => {
-            setAlert({...alert, openAlert: true, message: stringValues.notUpdateSuc,severity: "error"})
+    const updateData = async (token, userId) => {
+        try {
+            await axios.put(`/user?userId=${userId}`, {token});
+            setAlert({...alert, openAlert: true, message: stringValues.updateSuc, severity: "success"});
+            await fetchData();
+        }catch (err){
+            setAlert({...alert, openAlert: true, message: stringValues.notUpdateSuc, severity: "error"});
             console.error(err);
-        })
+        }
     }
-    const deleteData = (userId) => {
-        axios.delete(`/user?userId=${userId}`).then(() => {
-            setAlert({...alert, openAlert: true, message: stringValues.deletedSuc,severity: "success"})
-            fetchData();
-        }).catch((err)=>{
-            setAlert({...alert, openAlert: true, message: stringValues.notDeletedSuc,severity: "success"})
-            console.error(err)
-        })
+    const deleteData = async (userId) => {
+        try {
+            await axios.delete(`/user?userId=${userId}`);
+            setAlert({...alert, openAlert: true, message: stringValues.deletedSuc, severity: "success"});
+            await fetchData();
+        } catch (err) {
+            setAlert({...alert, openAlert: true, message: stringValues.notDeletedSuc, severity: "success"});
+            console.error(err);
+        }
     }
     useEffect(() => {
         setColumns([
@@ -107,6 +114,7 @@ export default function (props) {
                 title={stringValues.userInfo}
                 columns={columns}
                 data={data}
+                scrollwidth
                 localization={{
                     body: {
                         emptyDataSourceMessage: stringValues.displayUser,
@@ -140,6 +148,16 @@ export default function (props) {
                     }
                 }}
                 options={{exportButton: true}}
+                actions={[
+                    {
+                        icon: PersonIcon,
+                        tooltip: stringValues.profile,
+                        onClick: (event, rowData) => {
+                            const {id} = rowData;
+                            history.push(`/${flag}/profile/${id}`)
+                        }
+                    }
+                ]}
                 editable={{
                     onRowUpdate: (newData) =>
                         new Promise((resolve) => {
