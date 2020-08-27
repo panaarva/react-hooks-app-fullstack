@@ -73,14 +73,14 @@ function SignUp(props) {
     const handleClickShowPassword = () => {
         setValues({...values, showPassword: !values.showPassword});
     };
-    const createNewUser = () => {
+    const createNewUser = async () => {
         const token = encode(values);
-
-        axios.post('/user', {token}).then(() => {
-            fetchData();
-        }).catch((err) => {
+        try {
+            await axios.post('/user', {token})
+            await fetchData();
+        }catch (err){
             console.error(err);
-        });
+        }
     }
     const handleSubmit = (e) => {
         let message;
