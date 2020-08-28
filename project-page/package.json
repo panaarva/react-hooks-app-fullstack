@@ -1,6 +1,7 @@
 {
   "name": "project-page",
   "version": "1.0.0",
+  "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
@@ -21,7 +22,7 @@
   "proxy": "http://localhost:9000",
   "scripts": {
     "start": "set PORT=8000 && react-scripts start",
-    "build": "react-scripts build",
+    "build": "webpack --config webpack.config.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -38,6 +39,11 @@
     ]
   },
   "devDependencies": {
-    "terser-brunch": "^4.0.0"
+    "@babel/preset-flow": "^7.10.4",
+    "envify": "^4.1.0",
+    "terser": "^5.2.1",
+    "terser-brunch": "^4.0.0",
+    "uglifyify": "^5.0.2",
+    "webpack-cli": "^3.3.12"
   }
 }
