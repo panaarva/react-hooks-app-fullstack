@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
     },
     toolbar: {
-        width: "50%",
         backgroundColor: "#3f51b5",
         color: "white",
         flexDirection: 'column',
@@ -63,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
         color: '#fff',
     },
     box: {
-        width: "50%",
+        width: "40%",
         '@media (max-width:1300px)': {
             width: "100%"
         }
@@ -96,14 +95,14 @@ export default (props) => {
                 </Backdrop>
             </div>
             <div className={classes.root}>
-                <Toolbar className={classes.toolbar}>
-                    <Fab color="primary" aria-label="add" className={classes.fabButton}>
-                        <Avatar color="primary" className={classes.avatar}/>
-                    </Fab>
-                    <Typography className={classes.header}>{data.username}</Typography>
-                    <Typography variant="h6">{`${stringValues.userid}: ${userID}`}</Typography>
-                </Toolbar>
-                <Box boxShadow={3} className={classes.box}>
+                <Box boxShadow={3} className={classes.box} borderRadius={16}>
+                    <Toolbar className={classes.toolbar}>
+                        <Fab color="primary" aria-label="add" className={classes.fabButton}>
+                            <Avatar color="primary" className={classes.avatar}/>
+                        </Fab>
+                        <Typography className={classes.header}>{data.username}</Typography>
+                        <Typography variant="h6">{`${stringValues.userid}: ${userID}`}</Typography>
+                    </Toolbar>
                     <List>
                         <ListItem>
                             <ListItemAvatar>
