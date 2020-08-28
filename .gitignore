@@ -1,7 +1,7 @@
 /.idea
 /project-api/package-lock.json
 /project-api/node_modules
-./project-page/package-lock.json
+/project-page/package-lock.json
 /project-page/node_modules
 /project-page/src/appBundle.js
 /project-page/testaki.js
