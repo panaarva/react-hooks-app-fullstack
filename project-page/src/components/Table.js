@@ -126,7 +126,9 @@ export default function (props) {
                 title={stringValues.userInfo}
                 columns={columns}
                 data={data}
-                scrollwidth
+                components={{
+                    OverlayLoading: () => (<div/>)
+                }}
                 localization={{
                     body: {
                         emptyDataSourceMessage: stringValues.displayUser,
