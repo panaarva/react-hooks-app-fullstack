@@ -19,6 +19,7 @@
     "react-world-flags": "^1.4.0",
     "request": "^2.79.0"
   },
+  "publishConfig": { "registry": "https://npm.pkg.github.com/" },
   "proxy": "http://localhost:9000",
   "scripts": {
     "start": "set PORT=8000 && react-scripts start",
