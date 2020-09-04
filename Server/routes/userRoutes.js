@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router();
+    const router = express.Router();
 const createError = require('http-errors');
 const client = require('../lib/config').pool;
 const {encode, decode} = require('../lib/utils');
