@@ -17,12 +17,15 @@ import {Visibility, VisibilityOff, LockOutlined} from '@material-ui/icons';
 import axios from 'axios';
 import {encode} from '../utils/utils';
 import Alert from "./Alert";
-import {withRouter} from 'react-router-dom'
+import {withRouter} from 'react-router-dom';
+import {Formik} from 'formik';
+import * as Yup from 'yup';
+
 
 const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(8),
-        paddingBottom:theme.spacing(20),
+        paddingBottom: theme.spacing(20),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -48,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function SignIn(props) {
-    const {stringValues,flag} = props;
+    const {stringValues, flag} = props;
     const classes = useStyles();
     const [error, setError] = useState({
         severity: "",
@@ -61,55 +64,21 @@ function SignIn(props) {
         password: '',
         showPassword: false,
     });
+    const SignupSchema = Yup.object().shape({
+        password: Yup.string()
+            .min(8, stringValues.passLetters)
+            .max(19, stringValues.passLetters)
+            .required('Required'),
+        email: Yup.string()
+            .email('Invalid email')
+            .required('Required'),
+    });
     const handleClickShowPassword = () => {
         setValues({...values, showPassword: !values.showPassword});
     };
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
-    const handleChange = (prop) => (event) => {
-        setValues({...values, [prop]: event.target.value});
-    };
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        let message;
-        let errorFlag = false;
-        for (let key in values) {
-            if (key !== 'showPassword') {
-                if (!values[key]) {
-                    message = stringValues.fillAll;
-                    errorFlag = true;
-                    break;
-                } else {
-                    if (key === 'email') {
-                        const emailRegexp = /^[-!#$%&'*+/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
-                        if (!emailRegexp.test(values[key])) {
-                            message = stringValues.invalidEmail;
-                            errorFlag = true;
-                            break;
-                        }
-                    }
-                    if (key === 'password') {
-                        if (values[key].length < 8 || values[key].length > 16) {
-                            message = stringValues.passLetters;
-                            errorFlag = true;
-                            break;
-                        }
-                    }
-                    message = "";
-                    errorFlag = false;
-                }
-            }
-        }
-        if (!errorFlag) {
-            errorFlag = await verification(values.email, values.password);
-            (errorFlag) ? message = "Wrong email or password" : message = '';
-        }
-        if (!errorFlag) {
-            setError({...error, flag: true});
-            props.history.push(`/${flag}/success/signin`);
-        } else setError({...error, openAlert: true, message, severity: "error"});
-    }
     const verification = async (email, password) => {
         let verificationErr = false;
         const token = encode({
@@ -122,7 +91,7 @@ function SignIn(props) {
         }
         try {
             await axios.get(`/user/signIn`, {headers});
-        }catch (err){
+        } catch (err) {
             if (String(err).indexOf('Request failed with status code 404') !== -1) {
                 verificationErr = true;
             }
@@ -141,53 +110,82 @@ function SignIn(props) {
                         <Typography component="h1" variant="h5">
                             {stringValues.signIn}
                         </Typography>
-                        <form className={classes.form}>
-                            <TextField
-                                variant="outlined"
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="email"
-                                label={stringValues.email}
-                                name="email"
-                                autoComplete="email"
-                                autoFocus
-                                onChange={handleChange('email')}
-                            />
-                            <FormControl required className={classes.pass} variant="outlined">
-                                <InputLabel htmlFor="outlined-adornment-password">{stringValues.password}</InputLabel>
-                                <OutlinedInput
-                                    id="password"
-                                    variant="outlined"
-                                    type={values.showPassword ? 'text' : 'password'}
-                                    value={values.password}
-                                    onChange={handleChange('password')}
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                aria-label="toggle password visibility"
-                                                onClick={handleClickShowPassword}
-                                                onMouseDown={handleMouseDownPassword}
-                                                edge="end"
-                                            >
-                                                {values.showPassword ? <Visibility/> : <VisibilityOff/>}
-                                            </IconButton>
-                                        </InputAdornment>
+                        <Formik
+                            initialValues={{email: '', password: ''}}
+                            validationSchema={SignupSchema}
+                            onSubmit={(values, {setSubmitting}) => {
+                                setTimeout(async() => {
+                                    if(!(await verification(values.email,values.password))){
+                                        setError({...error, flag: true});
+                                    }else{
+                                        setError({...error, openAlert: true, message:"Wrong email or password", severity: "error"});
                                     }
-                                    labelWidth={70}
-                                />
-                            </FormControl>
-                            <Button
-                                type="button"
-                                fullWidth
-                                variant="contained"
-                                color="primary"
-                                className={classes.submit}
-                                onClick={handleSubmit}
-                            >
-                                {stringValues.signIn}
-                            </Button>
-                        </form>
+                                    setSubmitting(false);
+                                }, 400);
+                            }}
+                        >
+                            {({
+                                  values,
+                                  errors,
+                                  touched,
+                                  handleChange,
+                                  handleBlur,
+                                  handleSubmit,
+                                  isSubmitting,
+                              }) => (
+                                <form className={classes.form} onSubmit={handleSubmit}>
+                                    <TextField
+                                        variant="outlined"
+                                        margin="normal"
+                                        error={Boolean(errors.email && touched.email && errors.email)}
+                                        fullWidth
+                                        id="email"
+                                        value={values.email}
+                                        label={stringValues.email}
+                                        name="email"
+                                        helperText={errors.email && touched.email && errors.email}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                    />
+                                    <FormControl required className={classes.pass} variant="outlined">
+                                        <TextField
+                                            id="password"
+                                            variant="outlined"
+                                            error={Boolean(errors.password && touched.password && errors.password)}
+                                            type={values.showPassword ? 'text' : 'password'}
+                                            value={values.password}
+                                            onChange={handleChange}
+                                            label={stringValues.password}
+                                            onBlur={handleBlur}
+                                            helperText={errors.password && touched.password && errors.password}
+                                            endAdornment={
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        aria-label="toggle password visibility"
+                                                        onClick={handleClickShowPassword}
+                                                        onMouseDown={handleMouseDownPassword}
+                                                        edge="end"
+                                                    >
+                                                        {values.showPassword ? <Visibility/> : <VisibilityOff/>}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            }
+                                            labelWidth={70}
+                                        />
+
+                                    </FormControl>
+                                    <Button
+                                        fullWidth
+                                        variant="contained"
+                                        color="primary"
+                                        className={classes.submit}
+                                        type="submit" disabled={isSubmitting}
+                                    >
+                                        {stringValues.signIn}
+                                    </Button>
+                                </form>
+                            )}
+                        </Formik>
                     </div>
                     <Alert alert={error} setAlert={setError}/>
                 </Container> :
