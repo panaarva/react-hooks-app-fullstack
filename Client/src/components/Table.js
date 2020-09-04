@@ -173,13 +173,13 @@ export default function (props) {
                     }
                 ]}
                 editable={{
-                    onRowUpdate: async(newData) => {
+                    onRowUpdate: async (newData) => {
                         setOpen(true);
                         const token = encode(newData);
                         await updateData(token, newData.id);
                         setOpen(false);
                     },
-                    onRowDelete:async (oldData) => {
+                    onRowDelete: async (oldData) => {
                         setOpen(true);
                         await deleteData(data[oldData.tableData.id].id);
                         setOpen(false);
