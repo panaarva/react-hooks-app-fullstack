@@ -2,9 +2,9 @@
   "name": "project-api",
   "version": "1.0.0",
   "description": "",
+  "homepage": "./client",
   "scripts": {
-    "client": "cd Client && react-scripts start",
-    "server": "node ./Server/project-api.js"
+    "start": "concurrently --kill-others \"node ./Server/project-api.js\" \"cd client && set PORT=8000 && react-scripts start\""
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
@@ -44,6 +44,7 @@
   },
   "devDependencies": {
     "@babel/preset-flow": "^7.10.4",
+    "concurrently": "^5.3.0",
     "envify": "^4.1.0",
     "terser": "^5.2.1",
     "terser-brunch": "^4.0.0",
