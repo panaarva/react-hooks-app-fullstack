@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "client": "cd Client && react-scripts start",
-    "server": "cd Server && node project-api.js"
+    "server": "node ./Server/project-api.js"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
