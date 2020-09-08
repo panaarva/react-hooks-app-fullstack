@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "cd Server && npm install && node project-api",
-    "heruko": "cd Client && npm run build"
+    "heruko": "cd Client && npm install && npm run build"
   },
   "devDependencies": {
     "concurrently": "^5.3.0"
