@@ -31,10 +31,8 @@ router.get('/profile/:userid', async (req, res, next) => {
         next(createError(404, 'NOT FOUND'));
     }
 })
-router.get('/:flag/signIn', async (req, res, next) => {
-    res.status(200);
-    res.json("success");
-    /*try {
+router.get('/signIn', async (req, res, next) => {
+    try {
         console.log("ok");
         const {email, password} = decode(req.headers.token);
         const response = await client.query(`SELECT *
@@ -51,7 +49,7 @@ router.get('/:flag/signIn', async (req, res, next) => {
     } catch (e) {
         console.error(e);
         next(createError(404, 'NOT FOUND'));
-    }*/
+    }
 })
 router.post('/', async (req, res, next) => {
     const {token} = req.body;
@@ -113,4 +111,5 @@ router.put('/', async (req, res, next) => {
     }
 
 })
+
 module.exports = router;
