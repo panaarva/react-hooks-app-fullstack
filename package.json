@@ -5,7 +5,7 @@
   "homepage": "./client",
   "scripts": {
     "start": "cd Server && npm install && node project-api",
-    "heruko": "cd Client && npm install && npm run build"
+    "heroku-postbuild": "cd Client && npm install --only=dev && npm install && npm run build"
   },
 
   "devDependencies": {
