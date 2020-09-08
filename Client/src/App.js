@@ -89,7 +89,7 @@ function Copyright() {
 }
 
 function App() {
-    const allTabs = ['/signIn', '/signup', '/user','/profile','/success'];
+    const allTabs = ['', '/signup', '/user','/profile','/success'];
     const [flag, setFlag] = useState((window.location.pathname.indexOf("en")!==-1)?"en":"el");
         const classes = useStyles();
     const [value, setValue] = React.useState((window.location.pathname.indexOf('/el')!==-1||window.location.pathname.indexOf('/en')!==-1)?window.location.pathname:'');
