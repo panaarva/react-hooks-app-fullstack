@@ -1,6 +1,9 @@
 const {Pool} = require('pg');
 exports.pool = new Pool({
-    connectionString: 'postgres://krrudgocngkwmx:b307fe80bdcaeb1825606173a38bcd11778a9b78332edb321a3609c95f032fc1@ec2-54-75-150-32.eu-west-1.compute.amazonaws.com:5432/de6g0vt6hnieqp',
-    ssl:true
+    user: 'postgres',
+    host: '127.0.0.1',
+    database: 'project',
+    password: 'kn0wled9e',
+    port: 5432
 });
 exports.privateKey = `kn0wled9e#1998`;
