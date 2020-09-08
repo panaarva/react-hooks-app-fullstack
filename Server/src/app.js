@@ -4,7 +4,10 @@ const app = express();
 const userRoutes = require('../routes/userRoutes');
 const cors = require('cors');
 
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(path.join(__dirname, 'public')));
+if(process.env.NODE_ENV === 'production'){
+    app.use(express.static(path.join(__dirname, '../../Client/build')));
+}
 app.use(express.json());
 app.use(cors());
 app.options('*', cors());
