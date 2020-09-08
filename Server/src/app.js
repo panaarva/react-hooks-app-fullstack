@@ -13,7 +13,7 @@ app.use(express.static(path.join(__dirname, "../../Client/build")));
 app.use(express.json());
 app.use(cors());
 app.options('*', cors());
-app.use("/", userRoutes);
+app.use("/user", userRoutes);
 app.get('*',async (req,res)=>{
     res.sendFile(path.join(__dirname, "Client/build/index.html"));
 })
