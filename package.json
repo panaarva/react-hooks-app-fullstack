@@ -3,14 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "homepage": "./client",
-  "engines": {
-    "node": "10.16.3",
-    "npm": "6.9.0"
-  },
   "scripts": {
-    "start": "cd Server && npm install && node project-api",
-    "heruko": "cd Client && npm install && npm run build"
+    "start": "concurrently --kill-others \"cd Server && npm install && node project-api\" \"cd Client && npm install && npm run build\""
   },
+  "start": "concurrentlycd Server && npm install && node project-api",
+  "heruko": "cd Client && npm install && npm run build",
   "devDependencies": {
     "concurrently": "^5.3.0"
   }
