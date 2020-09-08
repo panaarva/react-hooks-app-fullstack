@@ -3,51 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "homepage": "./client",
+  "engines": {
+    "node": "10.16.3",
+    "npm": "6.9.0"
+  },
   "scripts": {
-    "start": "concurrently --kill-others \"node ./Server/project-api.js\" \"cd client && set PORT=8000 && react-scripts start\""
-  },
-  "dependencies": {
-    "@material-ui/core": "^4.11.0",
-    "@material-ui/icons": "^4.9.1",
-    "@material-ui/lab": "^4.0.0-alpha.56",
-    "axios": "^0.19.2",
-    "clsx": "^1.1.1",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "formik": "^2.1.5",
-    "http": "0.0.1-security",
-    "http-error": "0.0.6",
-    "jsonwebtoken": "^8.5.1",
-    "jspdf": "^1.5.3",
-    "material-table": "^1.69.0",
-    "pg": "^8.3.0",
-    "prop-types": "^15.7.2",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1",
-    "react-world-flags": "^1.4.0",
-    "request": "^2.79.0",
-    "yup": "^0.29.3"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "start": "cd Server && npm install && node project-api",
+    "heruko": "cd Client && npm install && set PORT=8000 && npm run build"
   },
   "devDependencies": {
-    "@babel/preset-flow": "^7.10.4",
-    "concurrently": "^5.3.0",
-    "envify": "^4.1.0",
-    "terser": "^5.2.1",
-    "terser-brunch": "^4.0.0",
-    "uglifyify": "^5.0.2"
+    "concurrently": "^5.3.0"
   }
 }
