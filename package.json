@@ -1,14 +1,8 @@
 {
   "name": "project-api",
   "version": "1.0.0",
-  "description": "",
-  "homepage": "./client",
   "scripts": {
     "start": "cd Server && npm install && node project-api",
     "heroku-postbuild": "cd Client && npm install --only=dev && npm install && npm run build"
-  },
-
-  "devDependencies": {
-    "concurrently": "^5.3.0"
   }
 }
